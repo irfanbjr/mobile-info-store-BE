@@ -22,7 +22,7 @@ const Product = require('./db/Product');
 //     console.log(data);
 // }
 
-const port = 5001
+const port = 5000
 
 app.get('/', (req, res) => {
   res.send('E-Mobile BackEnd is Runing!')

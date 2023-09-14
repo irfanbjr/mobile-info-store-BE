@@ -1,0 +1,75 @@
+1 docker pull mongo-express  
+2 docker pull mongo        
+3 docker images       // check the created images
+3.1 docker rmi -f // delete image
+4 docker network ls // check network 
+5 docker network create mongo-network  // for crate network to connect mongo and express
+6 docker run -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --name mongodb --net mongo-network mongo // this will change the default passwowrd and user name and will make the network
+7 docker run -d -p 8081:8081 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=password --net mongo-network --name mongo-express -e ME_CONFIG_MONGODB_SERVER=mongodb mongo-express
+
+8 docker ps // check container
+9 docker ps -a // check all container which running or not running 
+10 docker stop container id // will stop container
+11 docker start container id  // will start ....
+we can pull 2  images which has differnt image version i.e mongodb4.0 and mongo 3.4 etc
+so we can run 2 container with 2 images with differnt version 
+docker run mongo:4.0// note i already pull mongo latest version 
+// these container running the same port 
+how this work ?
+host laptop port 5000 cantaioner port 5000
+     laptop port 3000 cantaioner port 3000
+     laptop port 3000 cantaioner port 3000 // this show error brcause laptopp port 3000 already in use 
+so we can change laptop port 3001 cantaioner port 3000
+1st stop these two container and then check contain id with 
+command : docker ps -a ; and check the id 
+now we can bind these using the below comond 
+12 docker run -p3001:3000 mongo // note 1st lptop port 2nd conatiner port
+13 docker run -p3000:3000 mongo3.4 // this will running now for more check practically
+14 docker logs container id/name // of container 
+container takes name by when create we change name
+15 docker run -d -p3000:3000 --name mychoiceName //
+note -d for detached when need to chnage some thin in the container we need to use -d
+16 docker exec -it container id // this is for debug / check logs ,config ,folder etc
+
+corser will changes 
+17 ls ,env    
+Note: docker run and docker stop differnce
+docker run is where you create new container from immage
+docker run take  docker run imge:version
+or docker run -d -p --name takes etc
+while docker start you're not working with images but rather with container
+
+////////////////////////////////////////////////
+##Create docker network
+ docker network create mongo-network
+
+## start mongo DB
+docker run -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --name mongodb --net mongo-network mongo 
+
+## start mongoexpress
+
+docker run -d -p 8081:8081 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=password --net mongo-network --name mongo-express -e ME_CONFIG_MONGODB_SERVER=mongodb mongo-express
+
+
+///////////docker code push to image
+
+FROM node:18-alpine3.17
+ENV MONGO_DB_USERNAME=admin MONGO_DB_PWD=password
+RUN mkdir -p /home/app
+COPY .myapp/home/app
+CMD ["node","index.js"]
+if the above commands add in a file which must have Dockefile then below will bw the command
+1: docker build -t Appname(my-app:v1.0) .
+2:docker run -d -p 5000:5000 --name my-app 1ca1b3d9f92c:v1
+i.e docker run -d -p 5000:5000 my-app
+
+//to push image to the docker hub 1st make sure make tag like copy of image
+1:docker tag my-app irfandr/myapp:latest//docker tag my-app-image <dockerhub_username>/<repository_name>:<tag>
+
+2:docker push <dockerhub_username>/<repository_name>:<tag>
+ for exmple:docker tag my-app irfandr/myapp:v1.0 // this will public repo
+
+//To run the .yml file using below commond all the three command will run once
+1: docker-compose -f filename.yaml up
+for stoping the below command
+2: docker-compose -f filename.yaml down
