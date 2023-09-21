@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
 
 async function connectToDatabase() {
   try {
-    await mongoose.connect('mongodb+srv://forkhanlala:asdf12345@mobile-app.o4ivefl.mongodb.net/');
+    await mongoose.connect('mongodb://localhost:27017/e-commrece');
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -23,4 +23,16 @@ async function connectToDatabase() {
 }
 
 connectToDatabase();
+// const mongoose = require('mongoose');
+
+// async function connectToDatabase() {
+//   try {
+//     await mongoose.connect('mongodb+srv://forkhanlala:asdf12345@mobile-app.o4ivefl.mongodb.net/');
+//     console.log("MongoDB connected");
+//   } catch (error) {
+//     console.error("MongoDB connection error:", error);
+//   }
+// }
+
+// connectToDatabase();
 

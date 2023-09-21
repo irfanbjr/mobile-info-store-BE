@@ -22,7 +22,7 @@ const Product = require('./db/Product');
 //     console.log(data);
 // }
 
-const port = 5001
+const port = 5000
 
 app.get('/', (req, res) => {
   res.send('E-Mobile BackEnd is Runing!')
@@ -128,10 +128,19 @@ app.get("/products",vrifyToken,async(req,res)=>
 {
     try
     {
-        let products= await Product.find();
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
+        const skip = (page-1) * itemsPerPage;
+
+        //let products= await Product.find();
+        const products = await Product.find().skip(skip).limit(itemsPerPage).exec();
+        const totalCount = await Product.countDocuments();
         if(products)
         {
-            res.send(products);
+            res.status(200).json({
+                        products,
+                        totalPages: Math.ceil(totalCount / itemsPerPage)
+                      });
         }
         else
         {
@@ -144,6 +153,35 @@ app.get("/products",vrifyToken,async(req,res)=>
         res.status(500).send({ error: "An error occurred" });
     }
 })
+// Example of route modification
+// app.get('/products', async (req, res) => {
+//     try {
+//       const page = parseInt(req.query.page) || 1; // Parse the 'page' query parameter or default to page 1
+//       const itemsPerPage = 10; // Number of items per page
+  
+//       // Calculate the skip value based on the page number and items per page
+//       const skip = (page - 1) * itemsPerPage;
+  
+//       // Query your database to fetch paginated products
+//       const products = await Product.find()
+//         .skip(skip)
+//         .limit(itemsPerPage)
+//         .exec();
+  
+//       // You should also send the total count of products for pagination on the frontend
+//       const totalCount = await Product.countDocuments();
+  
+//       res.status(200).json({
+//         products,
+//         totalPages: Math.ceil(totalCount / itemsPerPage),
+//       });
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+//   });
+
+  
+  
 //delete route
 app.delete("/product/:id",vrifyToken,async(req,res)=>
 {

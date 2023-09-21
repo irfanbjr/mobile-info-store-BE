@@ -61,7 +61,7 @@ CMD ["node","index.js"]
 if the above commands add in a file which must have Dockefile then below will bw the command
 1: docker build -t Appname(my-app:v1.0) .
 2:docker run -d -p 5000:5000 --name my-app 1ca1b3d9f92c:v1
-i.e docker run -d -p 5000:5000 my-app
+i.e docker run -d -p 5000:5000 myapp:v1.0
 
 //to push image to the docker hub 1st make sure make tag like copy of image
 1:docker tag my-app irfandr/myapp:latest//docker tag my-app-image <dockerhub_username>/<repository_name>:<tag>
